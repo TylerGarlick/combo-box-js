@@ -1,33 +1,33 @@
 // Common Colors
-// $comboBoxFont: 'Open Sans', Arial, sans-serif !default;
-// $comboBoxFontSize: 16px !default;
-// $comboBoxBackground: #fff !default;
-// $comboBoxDarkText: #333 !default;
-// $comboBoxLightText: #ccc !default;
-// $comboBoxBorderColor: #919FA2 !default;
-// $comboBoxBorderWidth: 1px !default;
-// $comboBoxPaddingX: 12px !default;
-// $comboBoxPaddingY: 0px !default;
-// $comboBoxLineHeight: 36px !default;
-// $comboBoxMaxHeight: 300px !default;
-// $comboBoxFontWeight: 300 !default;
-// $comboBoxIconSize: $comboBoxFontSize + 8 !default;
+//$comboBoxFont: 'Open Sans', Arial, sans-serif !default;
+//$comboBoxFontSize: 16px !default;
+//$comboBoxBackground: #fff !default;
+//$comboBoxDarkText: #333 !default;
+//$comboBoxLightText: #ccc !default;
+//$comboBoxBorderColor: #919FA2 !default;
+//$comboBoxBorderWidth: 1px !default;
+//$comboBoxPaddingX: 12px !default;
+//$comboBoxPaddingY: 0px !default;
+//$comboBoxLineHeight: 36px !default;
+//$comboBoxMaxHeight: 300px !default;
+//$comboBoxFontWeight: 300 !default;
+//$comboBoxIconSize: $comboBoxFontSize + 8 !default;
+//$comboBoxArrowColor: $comboBoxDarkText !default;
+//$comboBoxClearXColor: $comboBoxLightText !default;
+//$comboBoxClearXColorHover: $comboBoxDarkText !default;
 
 // Dropdown Styles
-// $comboBoxOptionsText: #eee !default;
-// $comboBoxOptionsBackground: #eee !default;
-// $comboBoxOptionsHoverText: #fff !default;
-// $comboBoxOptionsHoverBackground: #333 !default;
+//$comboBoxOptionsText: #eee !default;
+//$comboBoxOptionsBackground: #eee !default;
+//$comboBoxOptionsHoverText: #fff !default;
+//$comboBoxOptionsHoverBackground: #333 !default;
 
 // Filter Styles
-// $comboBoxFilterFontSize: 14px !default;
-// $comboBoxFilterIconSize: 18px !default;
-// $comboBoxFilterCountFontSize: 8px !default;
+//$comboBoxFilterFontSize: 14px !default;
+//$comboBoxFilterIconSize: 18px !default;
+//$comboBoxFilterCountFontSize: 8px !default;
 
 // Selected Option Styles
-// $comboBoxSelectedOptionBackground: darken($comboBoxLightText, 5%) !default;
-
-// Overlay
-// $comboBoxOverlayBackground: red !default;
+//$comboBoxSelectedOptionBackground: darken($comboBoxLightText, 5%) !default;
 
 @import './combo-box-src';

@@ -57,6 +57,7 @@ input {
     margin-bottom: 0;
     margin-left: 3px;
     line-height: 36px;
+    color: #333;
     height: 24px;
     width: 24px; }
     #selected-option core-icon[icon="close"] {

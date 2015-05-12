@@ -12,6 +12,9 @@ $comboBoxLineHeight: 36px !default;
 $comboBoxMaxHeight: 300px !default;
 $comboBoxFontWeight: 300 !default;
 $comboBoxIconSize: $comboBoxFontSize + 8 !default;
+$comboBoxArrowColor: $comboBoxDarkText !default;
+$comboBoxClearXColor: $comboBoxLightText !default;
+$comboBoxClearXColorHover: $comboBoxDarkText !default;
 
 // Dropdown Styles
 $comboBoxOptionsText: #eee !default;
@@ -94,14 +97,15 @@ input {
     margin-bottom: 0;
     margin-left: $comboBoxPaddingX/4;
     line-height: $comboBoxLineHeight;
+    color: $comboBoxArrowColor;
     height: $comboBoxIconSize;
     width: $comboBoxIconSize;
     &[icon="close"]{
-      color: $comboBoxLightText;
+      color: $comboBoxClearXColor;
       transition: opacity 0.25s linear;
       opacity: 0;
       &:hover{
-        color: $comboBoxDarkText;
+        color: $comboBoxClearXColorHover;
         transition: color 0.25s linear;
       }
     }
