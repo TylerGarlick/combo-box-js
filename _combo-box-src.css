@@ -1,0 +1,171 @@
+:host {
+  display: block;
+  width: 500px;
+  position: relative;
+  height: 36px;
+  font-family: "Open Sans", Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 300;
+  z-index: 3; }
+
+#selectContainer {
+  color: #333;
+  border: 1px solid #919FA2;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%; }
+
+input {
+  height: calc(100% - 10px);
+  width: calc(100% - 20px); }
+
+::-webkit-input-placeholder {
+  font-family: "Open Sans", Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 300; }
+
+:-moz-placeholder {
+  font-family: "Open Sans", Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 300; }
+
+::-moz-placeholder {
+  font-family: "Open Sans", Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 300; }
+
+:-ms-input-placeholder {
+  font-family: "Open Sans", Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 300; }
+
+#selected-option {
+  padding: 0px 12px;
+  line-height: 36px;
+  height: 36px;
+  font-size: 16px;
+  font-weight: 300;
+  color: black;
+  font-family: 'Open Sans', Arial, sans-serif;
+  width: calc(100% - (($comboBoxPaddingX * 2)+($comboBoxBorderWidth * 2)));
+  background: #fff;
+  border-radius: 0; }
+  #selected-option core-icon {
+    float: right;
+    margin-top: 6px;
+    margin-bottom: 0;
+    margin-left: 3px;
+    line-height: 36px;
+    height: 24px;
+    width: 24px; }
+    #selected-option core-icon[icon="close"] {
+      color: #ccc;
+      transition: opacity 0.25s linear;
+      opacity: 0; }
+      #selected-option core-icon[icon="close"]:hover {
+        color: #333;
+        transition: color 0.25s linear; }
+  #selected-option:hover core-icon[icon="close"] {
+    opacity: 1; }
+    #selected-option:hover core-icon[icon="close"]:hover {
+      transition: opacity 0.25s linear; }
+
+core-selector {
+  overflow-y: scroll;
+  max-height: 300px; }
+  core-selector section, core-selector div {
+    padding: 6px 12px;
+    background: #eee; }
+    core-selector section:hover, core-selector div:hover {
+      background: #333;
+      color: #fff; }
+  core-selector article {
+    background: #eee; }
+
+#filter-container {
+  width: 100%;
+  background: #fff;
+  border-width: 1px 0;
+  border-style: solid;
+  border-color: #ccc;
+  position: relative; }
+
+#filterIcons {
+  position: absolute;
+  top: 50%;
+  right: 20px;
+  margin-top: -10px;
+  line-height: 1;
+  z-index: 2; }
+  #filterIcons core-icon {
+    width: 18px;
+    height: 18px;
+    color: #ccc;
+    transition: 0.25s color linear; }
+    #filterIcons core-icon[icon="close"] {
+      color: #ccc;
+      transition: color 0.25s linear; }
+      #filterIcons core-icon[icon="close"]:hover {
+        color: #333;
+        transition: color 0.25s linear; }
+
+#filter {
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 28px;
+  height: 28px;
+  padding: 6px 12px;
+  width: calc(100% - 50px);
+  position: relative;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  outline: none; }
+
+#dataWrapper {
+  overflow-y: scroll;
+  overflow-x: hidden;
+  position: relative;
+  max-height: 300px; }
+
+#noResults {
+  padding: 6px 12px;
+  font-style: italic; }
+
+#coreSelector {
+  position: relative;
+  top: 0;
+  left: 0; }
+
+#resultCount {
+  background: #fff;
+  text-align: right;
+  font-size: 8px;
+  color: #ccc;
+  position: absolute;
+  right: -20px;
+  bottom: -26px;
+  padding: 0 12px 6px;
+  display: block;
+  white-space: nowrap;
+  z-index: 1;
+  border-radius: 0 0 0 3px;
+  border-width: 0 0 1px 1px;
+  border-style: solid;
+  border-color: #ccc; }
+
+.core-selected {
+  background: #bfbfbf;
+  font-weight: bold; }
+
+#comboBoxOverlay, .overlay {
+  background: red;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 2; }
+
+/*# sourceMappingURL=_combo-box-src.css.map */

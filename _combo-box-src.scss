@@ -1,0 +1,233 @@
+// Common Colors
+$comboBoxFont: 'Open Sans', Arial, sans-serif !default;
+$comboBoxFontSize: 16px !default;
+$comboBoxBackground: #fff !default;
+$comboBoxDarkText: #333 !default;
+$comboBoxLightText: #ccc !default;
+$comboBoxBorderColor: #919FA2 !default;
+$comboBoxBorderWidth: 1px !default;
+$comboBoxPaddingX: 12px !default;
+$comboBoxPaddingY: 0px !default;
+$comboBoxLineHeight: 36px !default;
+$comboBoxMaxHeight: 300px !default;
+$comboBoxFontWeight: 300 !default;
+$comboBoxIconSize: $comboBoxFontSize + 8 !default;
+
+// Dropdown Styles
+$comboBoxOptionsText: #eee !default;
+$comboBoxOptionsBackground: #eee !default;
+$comboBoxOptionsHoverText: #fff !default;
+$comboBoxOptionsHoverBackground: #333 !default;
+
+// Filter Styles
+$comboBoxFilterFontSize: 14px !default;
+$comboBoxFilterIconSize: 18px !default;
+$comboBoxFilterCountFontSize: 8px !default;
+
+// Selected Option Styles
+$comboBoxSelectedOptionBackground: darken($comboBoxLightText, 5%) !default;
+
+:host {
+  display: block;
+  width: 500px;
+  position:relative;
+  height: $comboBoxLineHeight;
+  font-family: $comboBoxFont;
+  font-size: $comboBoxFontSize;
+  font-weight: $comboBoxFontWeight;
+  z-index: 3;
+}
+
+#selectContainer {
+  color: $comboBoxDarkText;
+  border: $comboBoxBorderWidth solid $comboBoxBorderColor;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+}
+
+input {
+  height: calc(100% - 10px);
+  width: calc(100% - 20px);
+}
+
+::-webkit-input-placeholder {
+   font-family: $comboBoxFont;
+   font-size: $comboBoxFontSize;
+   font-weight: $comboBoxFontWeight;
+}
+
+:-moz-placeholder {
+   font-family: $comboBoxFont;
+   font-size: $comboBoxFontSize;
+   font-weight: $comboBoxFontWeight;
+}
+
+::-moz-placeholder {
+   font-family: $comboBoxFont;
+   font-size: $comboBoxFontSize;
+   font-weight: $comboBoxFontWeight;
+}
+
+:-ms-input-placeholder {
+   font-family: $comboBoxFont;
+   font-size: $comboBoxFontSize;
+   font-weight: $comboBoxFontWeight;
+}
+
+#selected-option {
+  padding: $comboBoxPaddingY $comboBoxPaddingX;
+  line-height: $comboBoxLineHeight;
+  height: $comboBoxLineHeight;
+  font-size: $comboBoxFontSize;
+  font-weight: 300;
+  color: black;
+  font-family: 'Open Sans', Arial, sans-serif;
+  width: calc(100% - (($comboBoxPaddingX * 2)+($comboBoxBorderWidth * 2)));
+  background: $comboBoxBackground;
+  border-radius: 0;
+  core-icon {
+    float: right;
+    margin-top: $comboBoxPaddingX/2;
+    //margin-right: -($comboBoxPaddingX/2);
+    margin-bottom: 0;
+    margin-left: $comboBoxPaddingX/4;
+    line-height: $comboBoxLineHeight;
+    height: $comboBoxIconSize;
+    width: $comboBoxIconSize;
+    &[icon="close"]{
+      color: $comboBoxLightText;
+      transition: opacity 0.25s linear;
+      opacity: 0;
+      &:hover{
+        color: $comboBoxDarkText;
+        transition: color 0.25s linear;
+      }
+    }
+  }
+  &:hover {
+    core-icon {
+      &[icon="close"]{
+        opacity: 1;
+        &:hover {
+          transition: opacity 0.25s linear;
+        }
+      }
+    }
+  }
+}
+
+core-selector {
+  overflow-y: scroll;
+  max-height: $comboBoxMaxHeight;
+  section, div {
+    padding: $comboBoxPaddingX/2 $comboBoxPaddingX;
+    background: $comboBoxOptionsBackground;
+    &:hover {
+      background: $comboBoxOptionsHoverBackground;
+      color: $comboBoxOptionsHoverText;
+    }
+  }
+  article {
+    background: $comboBoxOptionsBackground;
+  }
+}
+
+#filter-container {
+  width: 100%;
+  background: $comboBoxBackground;
+  border-width: $comboBoxBorderWidth 0;
+  border-style: solid;
+  border-color: $comboBoxLightText;
+  position: relative;
+}
+
+#filterIcons {
+  position: absolute;
+  top: 50%;
+  right: 20px;
+  margin-top: -($comboBoxFilterIconSize/2)-1px;
+  line-height: 1;
+  z-index: 2;
+  core-icon {
+    width: $comboBoxFilterIconSize;
+    height: $comboBoxFilterIconSize;
+    color: $comboBoxLightText;
+    transition: 0.25s color linear;
+    &[icon="close"]{
+      color: $comboBoxLightText;
+      transition: color 0.25s linear;
+      &:hover{
+        color: $comboBoxDarkText;
+        transition: color 0.25s linear;
+      }
+    }
+  }
+}
+
+#filter {
+  font-weight: 300;
+  font-size: $comboBoxFilterFontSize;
+  line-height: $comboBoxFilterFontSize*2;
+  height: $comboBoxFilterFontSize*2;
+  padding: $comboBoxPaddingX/2 $comboBoxPaddingX;
+  //margin: $comboBoxPaddingX;
+  width: calc(100% - 50px);
+  position: relative;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  outline: none;
+}
+
+#dataWrapper {
+  overflow-y: scroll;
+  overflow-x: hidden;
+  position: relative;
+  max-height: $comboBoxMaxHeight;
+}
+
+#noResults {
+  padding: $comboBoxPaddingX/2 $comboBoxPaddingX;
+  font-style: italic;
+}
+
+#coreSelector {
+  position: relative;
+  top: 0;
+  left: 0;
+}
+
+#resultCount {
+  background: $comboBoxBackground;
+  text-align: right;
+  font-size: $comboBoxFilterCountFontSize;
+  color: $comboBoxLightText;
+  position: absolute;
+  right: -20px;
+  bottom: -26px;
+  padding: 0 $comboBoxPaddingX $comboBoxPaddingX/2;
+  display: block;
+  white-space: nowrap;
+  z-index: 1;
+  border-radius: 0 0 0 $comboBoxPaddingX/4;
+  border-width: 0 0 $comboBoxBorderWidth $comboBoxBorderWidth;
+  border-style: solid;
+  border-color: $comboBoxLightText;
+}
+
+.core-selected {
+  background: $comboBoxSelectedOptionBackground;
+  font-weight: bold;
+}
+
+#comboBoxOverlay, .overlay {
+  background: red;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 2;
+}

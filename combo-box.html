@@ -1,0 +1,274 @@
+  <link rel="import" href="../polymer/polymer.html">
+
+<link rel="import" href="../core-selection/core-selection.html">
+<link rel="import" href="../core-selector/core-selector.html">
+<link rel="import" href="../core-input/core-input.html">
+<link rel="import" href="../core-icons/core-icons.html">
+<link rel="import" href="../core-icon/core-icon.html">
+<link rel="import" href="../core-a11y-keys/core-a11y-keys.html">
+
+<script src="../lodash/lodash.js"></script>
+
+<!--
+Element providing solution to no problem in particular.
+
+##### Example
+
+    <combo-box></combo-box>
+
+@element combo-box
+@blurb Element providing solution to no problem in particular.
+@status alpha
+@homepage http://TylerGarlick.github.io/combo-box
+-->
+<polymer-element name="combo-box" attributes="options placeholder resettable filterType searchThreshold filterVisible valueField labelField" resettable="false" filterType="startsWith" valueField="value" labelField="label">
+
+  <template>
+    <link rel="stylesheet" href="combo-box.css">
+
+    <div on-tap="{{ toggle }}" on-keyup="{{ _performKeyboardNavigation }}" id="selectContainer">
+      <div is="core-input" id="selected-option">
+        {{ label }}
+        <core-icon icon="arrow-drop-down" hidden?="{{ showOptions }}"></core-icon>
+        <core-icon icon="arrow-drop-up" hidden?="{{ !showOptions }}"></core-icon>
+        <template if="{{ clearSelectedVisible }}">
+          <core-icon icon="close" on-tap="{{ clearSelectedValue }}"></core-icon>
+        </template>
+      </div>
+      <article id="filter-container" hidden?="{{ !showOptions }}">
+        <template if="{{ filterVisible }}">
+        <input type="text" is="core-input" id="filter" placeholder="Filter" on-keyup="{{ _performFilter }}" on-focus="{{ _filterFocused }}" on-blur="{{ _filterBlurred }}" />
+        <div id="filterIcons">
+          <template if="{{ filterResetVisible }}">
+            <core-icon icon="close" on-tap="{{ resetFilter }}"></core-icon>
+          </template>
+          <core-icon icon="search"></core-icon>
+          <div id="resultCount">{{ filteredOptions.length }} results</div>
+        </div>
+        </template>
+      </article>
+      <div id="dataWrapper" hidden?="{{ !showOptions }}">
+        <core-selector id="selector"  excludedLocalNames="section article details" valueattr="label" on-core-select="{{ _onSelectedItem }}" selected="{{ selected }}">
+          <template repeat="{{ option in filteredOptions }}">
+            <div label="{{ options.label }}">{{ option.label }}</div>
+          </template>
+          <article id="noResults" visible?="{{ filteredOptions.length == 0 }}">No results.</article>
+        </core-selector>
+      </div>
+    </div>
+
+  </template>
+
+  <script>
+    Polymer({
+
+      created: function(){
+        this.filteredOptions = [];
+        this.showOptions = false;
+        this.filterValue = '';
+        this.isFilterFocused = false;
+        this.isItemFocused = false;
+        this.searchThreshold = 10;
+        this.selectedItem = null;
+        this.filterResetVisible = false;
+        this.clearSelectedVisible = false;
+        this.filterVisible = false;
+        this.searchThreshold = 10;
+      },
+
+
+      ready: function(){
+        this.label = this.placeholder;
+      },
+
+       /**
+       * The `toggle` method toggles the visibility of the dropdown options
+       *
+       * @method toggle
+       */
+      toggle: function(){
+        if(this.isFilterFocused) return;
+        this.showOptions = !this.showOptions;
+
+        // Create and destroy overlay
+        if(this.showOptions){
+          this._addOverlay();
+        }
+
+        if(this.filterVisible){
+          this.async(function(){
+            document.querySelector('html /deep/ #filter').focus();
+          }, null, 1);
+        }
+      },
+
+      /**
+       * The `clearSelectedValue` method clears the selected value
+       *
+       * @method clearSelectedValue
+       */
+      clearSelectedValue: function(){
+        this.label = this.placeholder;
+        this.resetFilterValue();
+        this.selectedItem = null;
+        this.$.selector.selected = -1;
+        this.close();
+        this.toggleOptions = false;
+      },
+
+      resetFilterValue: function(){
+        this.filteredOptions = this._sanitizeOptions(this.options);
+        var filter = document.querySelector('html /deep/ #filter');
+        filter.value = '';
+        this._setSelectedIndex();
+      },
+
+      resetFilter: function(){
+        this.resetFilterValue();
+        this.isFilterFocused = true;
+      },
+
+      reset: function(){
+        this.label = this.placeholder;
+        this.resetFilterValue();
+      },
+
+      close: function(){
+        var self = this;
+        self._removeOverlay();
+        self.showOptions = false;
+      },
+
+      open: function(){
+        var self = this;
+        self._addOverlay();
+        self.showOptions = true;
+      },
+
+      filterOptionsBy: function(options, value){
+        var self = this;
+        var sanitizedOptions = this._sanitizeOptions(this.options);
+        return _.filter(sanitizedOptions, function(option){
+          if(self.filterType === 'contains'){
+            return _.contains(option.label, value);
+          } else {
+            return _.startsWith(option.label, value);
+          }
+        });
+      },
+
+      optionsChanged: function(oldValue, newValue){
+        if(newValue){
+          this.filteredOptions = this._sanitizeOptions(newValue);
+          this.filterVisible = this.options.length > this.searchThreshold;
+        }
+      },
+
+      _performFilter: function(e, detail){
+        var filter = document.querySelector('html /deep/ #filter');
+        var filterValue = filter.value;
+        this.filteredOptions = this.filterOptionsBy(this.options, filterValue);
+        this.filterResetVisible = filterValue.length > 0;
+      },
+
+      _sanitizeOptions: function(options){
+        options = options || [];
+
+        var self = this
+          , filteredOptions = [];
+
+        for(var i = 0; i < options.length; i++){
+          var item = options[i];
+          filteredOptions.push({ label: item[self.labelField], value: item[self.valueField]});
+        }
+
+        return filteredOptions;
+      },
+
+      _filterFocused: function(){
+        this.isFilterFocused = true;
+      },
+
+      _filterBlurred: function(){
+        this.isFilterFocused = false;
+      },
+
+      _itemFocused: function(){
+        this.isItemFocused = true;
+      },
+
+      _itemBlurred: function(){
+        this.isItemFocused = false;
+      },
+
+      _onSelectedItem: function(e, detail, sender){
+        if(this.$.selector.selected > -1){
+          this.clearSelectedVisible = true;
+          var item = e.detail.item;
+          this.label = item.innerText;
+
+          var predicate = {};
+          predicate[this.valueField] = this.label;
+          var selection = _.find(this.options, predicate);
+
+          if(!this.selectedItem || this.selectedItem[this.valueField] !== this.label){
+            this.selectedItem = selection;
+            this.asyncFire('combo-box-selected', { item: this.selectedItem });
+          }
+        } else {
+          this.clearSelectedVisible = false;
+          this.asyncFire('combo-box-unselected');
+        }
+      },
+
+      _keyPressed: function(){
+        console.log('pressed');
+      },
+
+      _performKeyboardNavigation: function(e, detail){
+        if(e.keyIdentifier === 'Down') {
+
+          this.$.selector.selectNext();
+        }
+
+        if(e.keyIdentifier === 'Up'){
+          this.$.selector.selectPrevious();
+        }
+
+        if(e.keyIdentifier === 'Enter'){
+          this.showOptions = false;
+        }
+      },
+
+      _setSelectedIndex: function(value){
+        var predicate = {};
+        predicate[this.valueField] = value;
+        this.$.selector.selected = _.findIndex(this.options, predicate);
+      },
+
+      _addOverlay: function(){
+        var self = this;
+        var overlay = document.querySelector('html /deep/ #comboBoxOverlay');
+        if(!overlay){
+          overlay = document.createElement('div');
+          overlay.id = 'comboBoxOverlay';
+          overlay.setAttribute('style', 'background: transparent; position: fixed; left: 0; top: 0; width: 100vw; height: 100vh; z-index: 2;');
+          overlay.addEventListener('click', function(){
+            self.close();
+          });
+          document.body.appendChild(overlay);
+        }
+      },
+
+      _removeOverlay: function(){
+        var overlay = document.querySelector('html /deep/ #comboBoxOverlay');
+        if(overlay){
+          document.body.removeChild(document.querySelector('html /deep/ #comboBoxOverlay'));
+        }
+      }
+
+
+
+    });
+  </script>
+</polymer-element>

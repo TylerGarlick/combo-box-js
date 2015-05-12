@@ -1,0 +1,24 @@
+{
+  "name": "combo-box",
+  "version": "0.0.1",
+  "keywords": [
+    "seed",
+    "polymer",
+    "web-components"
+  ],
+  "main": "combo-box.html",
+  "dependencies": {
+    "polymer": "Polymer/polymer#^0.5",
+    "core-selection": "Polymer/core-selection#^0.5",
+    "core-selector": "Polymer/core-selector#^0.5",
+    "lodash": "~3.8.0",
+    "core-input": "Polymer/core-input#~0.5.6",
+    "core-icon": "Polymer/core-icon#~0.5.6",
+    "core-icons": "Polymer/core-icons#~0.5.6",
+    "core-a11y-keys": "Polymer/core-a11y-keys"
+  },
+  "devDependencies": {
+    "web-component-tester": "Polymer/web-component-tester#^2.2.3",
+    "chance": "~0.7.4"
+  }
+}
