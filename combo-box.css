@@ -1,6 +1,6 @@
 :host {
   display: block;
-  width: 500px;
+  width: 100%;
   position: relative;
   height: 36px;
   font-family: "Open Sans", Arial, sans-serif;
@@ -158,15 +158,5 @@ core-selector {
 .core-selected {
   background: #bfbfbf;
   font-weight: bold; }
-
-body /deep/ #comboBoxOverlay,
-body > > > #comboBoxOverlay {
-  background: red;
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: 2; }
 
 /*# sourceMappingURL=combo-box.css.map */

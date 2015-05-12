@@ -29,7 +29,7 @@ $comboBoxSelectedOptionBackground: darken($comboBoxLightText, 5%) !default;
 
 :host {
   display: block;
-  width: 500px;
+  width: 100%;
   position:relative;
   height: $comboBoxLineHeight;
   font-family: $comboBoxFont;
@@ -220,14 +220,4 @@ core-selector {
 .core-selected {
   background: $comboBoxSelectedOptionBackground;
   font-weight: bold;
-}
-
-#comboBoxOverlay, .overlay {
-  background: red;
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: 2;
 }
