@@ -21,12 +21,12 @@ Element providing solution to no problem in particular.
 @status alpha
 @homepage http://TylerGarlick.github.io/combo-box
 -->
-<polymer-element name="combo-box" attributes="options placeholder resettable filterType searchThreshold filterVisible valueField labelField" resettable="false" filterType="startsWith" valueField="value" labelField="label">
+<polymer-element name="combo-box" attributes="options placeholder resettable filterType searchThreshold filterVisible valueField labelField noData" resettable="false" filterType="startsWith" valueField="value" labelField="label" noData="No results.">
 
   <template>
     <link rel="stylesheet" href="combo-box.css">
 
-    <div on-tap="{{ toggle }}" on-keyup="{{ _performKeyboardNavigation }}" id="selectContainer">
+    <div on-tap="{{ toggle }}" on-keyup="{{ _performKeyboardNavigation }}" id="selectContainer" active?="{{ showOptions }}">
       <div is="core-input" id="selected-option">
         {{ label }}
         <core-icon icon="arrow-drop-down" hidden?="{{ showOptions }}"></core-icon>
@@ -52,7 +52,7 @@ Element providing solution to no problem in particular.
           <template repeat="{{ option in filteredOptions }}">
             <div label="{{ options.label }}">{{ option.label }}</div>
           </template>
-          <article id="noResults" visible?="{{ filteredOptions.length == 0 }}">No results.</article>
+          <article id="noResults" hidden?="{{ filteredOptions.length !== 0 }}">{{ noData }}</article>
         </core-selector>
       </div>
     </div>
@@ -252,7 +252,7 @@ Element providing solution to no problem in particular.
         if(!overlay){
           overlay = document.createElement('div');
           overlay.id = 'comboBoxOverlay';
-          overlay.setAttribute('style', 'background: transparent; position: fixed; left: 0; top: 0; width: 100vw; height: 100vh; z-index: 2;');
+          overlay.setAttribute('style', 'background: transparent; position: fixed; left: 0; top: 0; width: 100vw; height: 100vh; z-index: 3;');
           overlay.addEventListener('click', function(){
             self.close();
           });
