@@ -53,35 +53,6 @@ $comboBoxSelectedOptionBackground: darken($comboBoxLightText, 5%) !default;
   }
 }
 
-input {
-  height: calc(100% - 10px);
-  width: calc(100% - 20px);
-}
-
-::-webkit-input-placeholder {
-   font-family: $comboBoxFont;
-   font-size: $comboBoxFontSize;
-   font-weight: $comboBoxFontWeight;
-}
-
-:-moz-placeholder {
-   font-family: $comboBoxFont;
-   font-size: $comboBoxFontSize;
-   font-weight: $comboBoxFontWeight;
-}
-
-::-moz-placeholder {
-   font-family: $comboBoxFont;
-   font-size: $comboBoxFontSize;
-   font-weight: $comboBoxFontWeight;
-}
-
-:-ms-input-placeholder {
-   font-family: $comboBoxFont;
-   font-size: $comboBoxFontSize;
-   font-weight: $comboBoxFontWeight;
-}
-
 #selected-option {
   padding: $comboBoxPaddingY $comboBoxPaddingX;
   line-height: $comboBoxLineHeight;
@@ -227,4 +198,35 @@ core-selector {
 
 .core-selected {
   background: $comboBoxSelectedOptionBackground;
+}
+
+sm-select[type="combo-box"]{
+  input {
+    height: calc(100% - 10px);
+    width: calc(100% - 20px);
+  }
+
+  ::-webkit-input-placeholder {
+    font-family: $comboBoxFont;
+    font-size: $comboBoxFontSize;
+    font-weight: $comboBoxFontWeight;
+  }
+
+  :-moz-placeholder {
+    font-family: $comboBoxFont;
+    font-size: $comboBoxFontSize;
+    font-weight: $comboBoxFontWeight;
+  }
+
+  ::-moz-placeholder {
+    font-family: $comboBoxFont;
+    font-size: $comboBoxFontSize;
+    font-weight: $comboBoxFontWeight;
+  }
+
+  :-ms-input-placeholder {
+    font-family: $comboBoxFont;
+    font-size: $comboBoxFontSize;
+    font-weight: $comboBoxFontWeight;
+  }
 }

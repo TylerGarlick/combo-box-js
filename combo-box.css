@@ -18,30 +18,6 @@
   #selectContainer[active] {
     z-index: 4; }
 
-input {
-  height: calc(100% - 10px);
-  width: calc(100% - 20px); }
-
-::-webkit-input-placeholder {
-  font-family: "Open Sans", Arial, sans-serif;
-  font-size: 16px;
-  font-weight: 300; }
-
-:-moz-placeholder {
-  font-family: "Open Sans", Arial, sans-serif;
-  font-size: 16px;
-  font-weight: 300; }
-
-::-moz-placeholder {
-  font-family: "Open Sans", Arial, sans-serif;
-  font-size: 16px;
-  font-weight: 300; }
-
-:-ms-input-placeholder {
-  font-family: "Open Sans", Arial, sans-serif;
-  font-size: 16px;
-  font-weight: 300; }
-
 #selected-option {
   padding: 0px 12px;
   line-height: 36px;
@@ -161,5 +137,25 @@ core-selector {
 
 .core-selected {
   background: #bfbfbf; }
+
+sm-select[type="combo-box"] input {
+  height: calc(100% - 10px);
+  width: calc(100% - 20px); }
+sm-select[type="combo-box"] ::-webkit-input-placeholder {
+  font-family: "Open Sans", Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 300; }
+sm-select[type="combo-box"] :-moz-placeholder {
+  font-family: "Open Sans", Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 300; }
+sm-select[type="combo-box"] ::-moz-placeholder {
+  font-family: "Open Sans", Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 300; }
+sm-select[type="combo-box"] :-ms-input-placeholder {
+  font-family: "Open Sans", Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 300; }
 
 /*# sourceMappingURL=combo-box.css.map */
