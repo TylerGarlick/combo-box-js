@@ -38,6 +38,10 @@ $comboBoxSelectedOptionBackground: darken($comboBoxLightText, 5%) !default;
   font-family: $comboBoxFont;
   font-size: $comboBoxFontSize;
   font-weight: $comboBoxFontWeight;
+  input {
+    height: calc(100% - 10px);
+    width: calc(100% - 20px);
+  }
 }
 
 #selectContainer {
@@ -51,6 +55,30 @@ $comboBoxSelectedOptionBackground: darken($comboBoxLightText, 5%) !default;
   &[active] {
     z-index: 4;
   }
+}
+
+::-webkit-input-placeholder {
+   font-family: $comboBoxFont;
+   font-size: $comboBoxFontSize;
+   font-weight: $comboBoxFontWeight;
+}
+
+:-moz-placeholder {
+   font-family: $comboBoxFont;
+   font-size: $comboBoxFontSize;
+   font-weight: $comboBoxFontWeight;
+}
+
+::-moz-placeholder {
+   font-family: $comboBoxFont;
+   font-size: $comboBoxFontSize;
+   font-weight: $comboBoxFontWeight;
+}
+
+:-ms-input-placeholder {
+   font-family: $comboBoxFont;
+   font-size: $comboBoxFontSize;
+   font-weight: $comboBoxFontWeight;
 }
 
 #selected-option {
@@ -198,35 +226,4 @@ core-selector {
 
 .core-selected {
   background: $comboBoxSelectedOptionBackground;
-}
-
-sm-select[type="combo-box"]{
-  input {
-    height: calc(100% - 10px);
-    width: calc(100% - 20px);
-  }
-
-  ::-webkit-input-placeholder {
-    font-family: $comboBoxFont;
-    font-size: $comboBoxFontSize;
-    font-weight: $comboBoxFontWeight;
-  }
-
-  :-moz-placeholder {
-    font-family: $comboBoxFont;
-    font-size: $comboBoxFontSize;
-    font-weight: $comboBoxFontWeight;
-  }
-
-  ::-moz-placeholder {
-    font-family: $comboBoxFont;
-    font-size: $comboBoxFontSize;
-    font-weight: $comboBoxFontWeight;
-  }
-
-  :-ms-input-placeholder {
-    font-family: $comboBoxFont;
-    font-size: $comboBoxFontSize;
-    font-weight: $comboBoxFontWeight;
-  }
 }
