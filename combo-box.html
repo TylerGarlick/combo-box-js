@@ -21,12 +21,12 @@ Element providing solution to no problem in particular.
 @status alpha
 @homepage http://TylerGarlick.github.io/combo-box
 -->
-<polymer-element name="combo-box" attributes="options placeholder resettable filterType searchThreshold filterVisible valueField labelField noData selected" resettable="false" filterType="startsWith" valueField="value" labelField="label" noData="No results.">
+<polymer-element name="combo-box" attributes="options placeholder resettable filterType searchThreshold filterVisible valueField labelField noData value" resettable="false" filterType="startsWith" valueField="value" labelField="label" noData="No results.">
 
   <template>
     <link rel="stylesheet" href="combo-box.css">
 
-    <div on-tap="{{ toggle }}" on-keyup="{{ _performKeyboardNavigation }}" id="selectContainer" active?="{{ showOptions }}">
+    <div on-tap="{{ toggle }}" id="selectContainer" active?="{{ showOptions }}">
       <div is="core-input" id="selected-option">
         {{ label }}
         <core-icon icon="arrow-drop-down" hidden?="{{ showOptions }}"></core-icon>
@@ -38,6 +38,7 @@ Element providing solution to no problem in particular.
       <article id="filter-container" hidden?="{{ !showOptions }}">
         <template if="{{ filterVisible }}">
           <input type="text" is="core-input" id="filter" placeholder="Filter" on-keyup="{{ _performFilter }}" on-focus="{{ _filterFocused }}" on-blur="{{ _filterBlurred }}" />
+
           <div id="filterIcons">
             <template if="{{ filterResetVisible }}">
               <core-icon icon="close" on-tap="{{ resetFilter }}"></core-icon>
@@ -48,21 +49,21 @@ Element providing solution to no problem in particular.
         </template>
       </article>
       <div id="dataWrapper" hidden?="{{ !showOptions }}">
-        <core-selector id="selector" excludedLocalNames="section article details" valueattr="label" on-core-select="{{ _onSelectedItem }}" selected="{{ selected }}">
+        <core-selector id="selector" excludedLocalNames="section article details" valueattr="value" labelattr="label" on-core-select="{{ _onSelectedItem }}" selected="{{ value }}">
           <template repeat="{{ option in filteredOptions }}">
-            <div label="{{ options.label }}">{{ option.label }}</div>
+            <div label="{{ option[labelField] }}" value="{{ option[valueField] }}">{{ option[labelField] }}</div>
           </template>
           <article id="noResults" hidden?="{{ filteredOptions.length !== 0 }}">{{ noData }}</article>
         </core-selector>
       </div>
     </div>
-
+    <core-a11y-keys keys="Up Down Enter esc" on-keys-pressed="{{ _handleKeyPressed }}"></core-a11y-keys>
   </template>
 
   <script>
     Polymer({
 
-      created: function(){
+      created: function () {
         this.filteredOptions = [];
         this.showOptions = false;
         this.filterValue = '';
@@ -76,9 +77,9 @@ Element providing solution to no problem in particular.
         this.searchThreshold = 10;
       },
 
-
-      ready: function(){
+      ready: function () {
         this.label = this.placeholder;
+        this.valueCommitted = this.value;
       },
 
       /**
@@ -86,20 +87,20 @@ Element providing solution to no problem in particular.
        *
        * @method toggle
        */
-      toggle: function(){
-        if(this.isFilterFocused) return;
+      toggle: function () {
+        if (this.isFilterFocused) return;
         this.showOptions = !this.showOptions;
 
         // Create and destroy overlay
-        if(this.showOptions){
+        if (this.showOptions) {
           this._addOverlay();
-        }else{
+        } else {
           this._removeOverlay();
         }
 
         var self = this;
-        if(this.filterVisible){
-          this.async(function(){
+        if (this.filterVisible) {
+          this.async(function () {
             self.$['filter-container'].querySelector('input').focus();
           }, null, 1);
         }
@@ -110,114 +111,139 @@ Element providing solution to no problem in particular.
        *
        * @method clearSelectedValue
        */
-      clearSelectedValue: function(){
+      clearSelectedValue: function () {
         var self = this;
         this.label = this.placeholder;
         this.resetFilterValue();
         this.selectedItem = null;
-        this.$.selector.selected = -1;
-        this.async( function() {
+        this.$.selector.selectedIndex = -1;
+        this.async(function () {
           self.close();
         });
       },
 
-      resetFilterValue: function(){
-        this.filteredOptions = this._sanitizeOptions(this.options);
+      resetFilterValue: function () {
+        this.filteredOptions = this.options;
         var filter = this.$['filter-container'].querySelector('input');
-        if(filter)
+        if (filter) {
           filter.value = '';
-        this._setSelectedIndex();
+        }
       },
 
-      resetFilter: function(){
+      resetFilter: function () {
         this.resetFilterValue();
         this.isFilterFocused = true;
       },
 
-      reset: function(){
+      reset: function () {
         this.label = this.placeholder;
         this.resetFilterValue();
       },
 
-      close: function(){
+      close: function () {
         var self = this;
         self._removeOverlay();
         self.showOptions = false;
       },
 
-      open: function(){
+      open: function () {
         var self = this;
         self._addOverlay();
         self.showOptions = true;
       },
 
-      filterOptionsBy: function(options, value){
+      filterOptionsBy: function (options, value) {
         var self = this;
-        var sanitizedOptions = this._sanitizeOptions(this.options);
-        return _.filter(sanitizedOptions, function(option){
-          if(self.filterType === 'contains'){
-            return _.contains(option.label, value);
+        value = (value || '').toLowerCase();
+        return _.filter(this.options, function (option) {
+          var label = option[self.labelField].toLowerCase();
+          if (self.filterType === 'contains') {
+            return _.contains(label, value);
           } else {
-            return _.startsWith(option.label.toLowerCase(), value.toLowerCase());
+            return _.startsWith(label, value);
           }
         });
       },
 
-      optionsChanged: function(oldValue, newValue){
-        if(newValue){
-          this.filteredOptions = this._sanitizeOptions(newValue);
+      findOptionByValue: function (value) {
+        var predicate = {};
+        predicate[this.valueField] = value;
+        return _.find(this.options, predicate);
+      },
+
+      findOptionByLabel: function (label) {
+        var predicate = {};
+        predicate[this.labelField] = label;
+        return _.find(this.options, predicate);
+      },
+
+      findOptionIndexByLabel: function (options, label) {
+        var predicate = {};
+        predicate[this.labelField] = label;
+        return _.findIndex(options, predicate);
+      },
+
+      optionsChanged: function (oldValue, newValue) {
+        if (newValue) {
+          this.filteredOptions = this.options;
           this.filterVisible = this.options.length > this.searchThreshold;
+
+          if (this.valueCommitted) {
+            var selection = this.findOptionByValue(this.valueCommitted);
+            if (selection) {
+              this.label = selection[this.labelField];
+              this.valueCommitted = '';
+            }
+          }
         }
       },
 
-      _performFilter: function(e, detail){
+      _performFilter: function (e, detail) {
         var filter = this.$['filter-container'].querySelector('input');
         var filterValue = filter.value;
         this.filteredOptions = this.filterOptionsBy(this.options, filterValue);
         this.filterResetVisible = filterValue.length > 0;
       },
 
-      _sanitizeOptions: function(options){
+      _sanitizeOptions: function (options) {
         options = options || [];
 
         var self = this
           , filteredOptions = [];
 
-        for(var i = 0; i < options.length; i++){
+        for(var i = 0; i < options.length; i++) {
           var item = options[i];
-          filteredOptions.push({ label: item[self.labelField], value: item[self.valueField]});
+          filteredOptions.push({ label: item[self.labelField], value: item[self.valueField] });
         }
 
         return filteredOptions;
       },
 
-      _filterFocused: function(){
+      _filterFocused: function () {
         this.isFilterFocused = true;
       },
 
-      _filterBlurred: function(){
+      _filterBlurred: function () {
         this.isFilterFocused = false;
       },
 
-      _itemFocused: function(){
+      _itemFocused: function () {
         this.isItemFocused = true;
       },
 
-      _itemBlurred: function(){
+      _itemBlurred: function () {
         this.isItemFocused = false;
       },
 
-      _onSelectedItem: function(e, detail, sender){
-        if(this.$.selector.selected > -1){
+      _onSelectedItem: function (e, detail, sender) {
+        if (this.$.selector.selected) {
           this.clearSelectedVisible = true;
           var item = e.detail.item;
           this.label = item.innerText;
 
-          var predicate = {};
-          predicate[this.labelField] = this.label;
-          var selection = _.find(this.options, predicate);
-
-          if(!this.selectedItem || this.selectedItem[this.labelField] !== this.label){
+          var selection = this.findOptionByLabel(this.label);
+          this.$.selector.selectedIndex = this.findOptionIndexByLabel(this.filteredOptions, this.label);
+          if (!this.selectedItem || this.selectedItem[this.labelField] !== this.label) {
             this.selectedItem = selection;
             this.asyncFire('combo-box-selected', { item: this.selectedItem });
           }
@@ -227,49 +253,56 @@ Element providing solution to no problem in particular.
         }
       },
 
-      _keyPressed: function(){
-        console.log('pressed');
-      },
-
-      _performKeyboardNavigation: function(e, detail){
-        if(e.keyIdentifier === 'Down') {
-
-          this.$.selector.selectNext();
-        }
-
-        if(e.keyIdentifier === 'Up'){
-          this.$.selector.selectPrevious();
-        }
-
-        if(e.keyIdentifier === 'Enter'){
-          this.showOptions = false;
-        }
-      },
-
-      _setSelectedIndex: function(value){
+      _setSelectedIndex: function (value) {
         var predicate = {};
         predicate[this.valueField] = value;
-        this.$.selector.selected = _.findIndex(this.options, predicate);
+        this.$.selector.selected = value;
       },
 
-      _addOverlay: function(){
+      _addOverlay: function () {
         var self = this;
         var overlay = document.querySelector('html /deep/ #comboBoxOverlay');
-        if(!overlay){
+        if (!overlay) {
           overlay = document.createElement('div');
           overlay.id = 'comboBoxOverlay';
           overlay.setAttribute('style', 'background: transparent; position: fixed; left: 0; top: 0; width: 100vw; height: 100vh; z-index: 3;');
-          overlay.addEventListener('click', function(){
+          overlay.addEventListener('click', function () {
+            self.resetFilterValue();
             self.close();
           });
           document.body.appendChild(overlay);
         }
       },
 
-      _removeOverlay: function(){
+      _removeOverlay: function () {
         var overlay = document.querySelector('html /deep/ #comboBoxOverlay');
-        if(overlay){
+        if (overlay) {
           document.body.removeChild(document.querySelector('html /deep/ #comboBoxOverlay'));
+        }
+      },
+
+      _handleKeyPressed: function (e, details) {
+        switch (details.key) {
+          case 'down':
+          {
+            this.$.selector.selectNext(true);
+            break;
+          }
+          case 'up':
+          {
+            this.$.selector.selectPrevious(true);
+            break;
+          }
+          case 'enter':
+          {
+            this.showOptions = false;
+            break;
+          }
+          case 'esc':
+          {
+            this.close();
+            break;
+          }
         }
       }
 

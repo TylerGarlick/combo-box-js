@@ -1,0 +1,27 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../core-selection/core-selection.html" />
+
+<script src="../lodash/lodash.min.js"></script>
+
+<polymer-element name="combo-box-base" attributes="options selected">
+  <template>
+    <div on-tap="{{ onActivated }}">
+      <content></content>
+    </div>
+    <core-selection id="selection"></core-selection>
+  </template>
+  <script>
+    Polymer({
+      created: function () {
+        this.options = [];
+        this.selected = [];
+      },
+
+      onActivated: function () {
+
+      }
+    });
+
+  </script>
+
+</polymer-element>
