@@ -160,7 +160,6 @@ core-selector {
   border-color: #ccc; }
 
 .core-selected {
-  background: #bfbfbf;
-  font-weight: bold; }
+  background: #bfbfbf; }
 
 /*# sourceMappingURL=combo-box.css.map */
