@@ -213,10 +213,10 @@ Element providing solution to no problem in particular.
           this.label = item.innerText;
 
           var predicate = {};
-          predicate[this.valueLabel] = this.label;
+          predicate[this.labelField] = this.label;
           var selection = _.find(this.options, predicate);
 
-          if(!this.selectedItem || this.selectedItem[this.valueLabel] !== this.label){
+          if(!this.selectedItem || this.selectedItem[this.labelField] !== this.label){
             this.selectedItem = selection;
             this.asyncFire('combo-box-selected', { item: this.selectedItem });
           }
