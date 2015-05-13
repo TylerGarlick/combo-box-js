@@ -1,4 +1,4 @@
-  <link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../polymer/polymer.html">
 
 <link rel="import" href="../core-selection/core-selection.html">
 <link rel="import" href="../core-selector/core-selector.html">
@@ -21,7 +21,7 @@ Element providing solution to no problem in particular.
 @status alpha
 @homepage http://TylerGarlick.github.io/combo-box
 -->
-<polymer-element name="combo-box" attributes="options placeholder resettable filterType searchThreshold filterVisible valueField labelField noData" resettable="false" filterType="startsWith" valueField="value" labelField="label" noData="No results.">
+<polymer-element name="combo-box" attributes="options placeholder resettable filterType searchThreshold filterVisible valueField labelField noData selected" resettable="false" filterType="startsWith" valueField="value" labelField="label" noData="No results.">
 
   <template>
     <link rel="stylesheet" href="combo-box.css">
@@ -37,18 +37,18 @@ Element providing solution to no problem in particular.
       </div>
       <article id="filter-container" hidden?="{{ !showOptions }}">
         <template if="{{ filterVisible }}">
-        <input type="text" is="core-input" id="filter" placeholder="Filter" on-keyup="{{ _performFilter }}" on-focus="{{ _filterFocused }}" on-blur="{{ _filterBlurred }}" />
-        <div id="filterIcons">
-          <template if="{{ filterResetVisible }}">
-            <core-icon icon="close" on-tap="{{ resetFilter }}"></core-icon>
-          </template>
-          <core-icon icon="search"></core-icon>
-          <div id="resultCount">{{ filteredOptions.length }} results</div>
-        </div>
+          <input type="text" is="core-input" id="filter" placeholder="Filter" on-keyup="{{ _performFilter }}" on-focus="{{ _filterFocused }}" on-blur="{{ _filterBlurred }}" />
+          <div id="filterIcons">
+            <template if="{{ filterResetVisible }}">
+              <core-icon icon="close" on-tap="{{ resetFilter }}"></core-icon>
+            </template>
+            <core-icon icon="search"></core-icon>
+            <div id="resultCount">{{ filteredOptions.length }} results</div>
+          </div>
         </template>
       </article>
       <div id="dataWrapper" hidden?="{{ !showOptions }}">
-        <core-selector id="selector"  excludedLocalNames="section article details" valueattr="label" on-core-select="{{ _onSelectedItem }}" selected="{{ selected }}">
+        <core-selector id="selector" excludedLocalNames="section article details" valueattr="label" on-core-select="{{ _onSelectedItem }}" selected="{{ selected }}">
           <template repeat="{{ option in filteredOptions }}">
             <div label="{{ options.label }}">{{ option.label }}</div>
           </template>
@@ -81,7 +81,7 @@ Element providing solution to no problem in particular.
         this.label = this.placeholder;
       },
 
-       /**
+      /**
        * The `toggle` method toggles the visibility of the dropdown options
        *
        * @method toggle
@@ -97,9 +97,10 @@ Element providing solution to no problem in particular.
           this._removeOverlay();
         }
 
+        var self = this;
         if(this.filterVisible){
           this.async(function(){
-            document.querySelector('html /deep/ #filter').focus();
+            self.$['filter-container'].querySelector('input').focus();
           }, null, 1);
         }
       },
@@ -122,7 +123,7 @@ Element providing solution to no problem in particular.
 
       resetFilterValue: function(){
         this.filteredOptions = this._sanitizeOptions(this.options);
-        var filter = document.querySelector('html /deep/ #filter');
+        var filter = this.$['filter-container'].querySelector('input');
         if(filter)
           filter.value = '';
         this._setSelectedIndex();
@@ -157,7 +158,7 @@ Element providing solution to no problem in particular.
           if(self.filterType === 'contains'){
             return _.contains(option.label, value);
           } else {
-            return _.startsWith(option.label, value);
+            return _.startsWith(option.label.toLowerCase(), value.toLowerCase());
           }
         });
       },
@@ -170,7 +171,7 @@ Element providing solution to no problem in particular.
       },
 
       _performFilter: function(e, detail){
-        var filter = document.querySelector('html /deep/ #filter');
+        var filter = this.$['filter-container'].querySelector('input');
         var filterValue = filter.value;
         this.filteredOptions = this.filterOptionsBy(this.options, filterValue);
         this.filterResetVisible = filterValue.length > 0;
@@ -271,8 +272,6 @@ Element providing solution to no problem in particular.
           document.body.removeChild(document.querySelector('html /deep/ #comboBoxOverlay'));
         }
       }
-
-
 
     });
   </script>

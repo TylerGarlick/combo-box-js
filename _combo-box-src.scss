@@ -38,10 +38,6 @@ $comboBoxSelectedOptionBackground: darken($comboBoxLightText, 5%) !default;
   font-family: $comboBoxFont;
   font-size: $comboBoxFontSize;
   font-weight: $comboBoxFontWeight;
-  input {
-    height: calc(100% - 10px);
-    width: calc(100% - 20px);
-  }
 }
 
 #selectContainer {
@@ -54,6 +50,10 @@ $comboBoxSelectedOptionBackground: darken($comboBoxLightText, 5%) !default;
   z-index: 2;
   &[active] {
     z-index: 4;
+  }
+  input {
+    height: calc(100% - 10px);
+    width: calc(100% - 20px);
   }
 }
 
