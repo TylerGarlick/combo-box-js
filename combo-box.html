@@ -110,12 +110,14 @@ Element providing solution to no problem in particular.
        * @method clearSelectedValue
        */
       clearSelectedValue: function(){
+        var self = this;
         this.label = this.placeholder;
         this.resetFilterValue();
         this.selectedItem = null;
         this.$.selector.selected = -1;
-        this.close();
-        this.toggleOptions = false;
+        this.async( function() {
+          self.close();
+        });
       },
 
       resetFilterValue: function(){
@@ -211,10 +213,10 @@ Element providing solution to no problem in particular.
           this.label = item.innerText;
 
           var predicate = {};
-          predicate[this.valueField] = this.label;
+          predicate[this.valueLabel] = this.label;
           var selection = _.find(this.options, predicate);
 
-          if(!this.selectedItem || this.selectedItem[this.valueField] !== this.label){
+          if(!this.selectedItem || this.selectedItem[this.valueLabel] !== this.label){
             this.selectedItem = selection;
             this.asyncFire('combo-box-selected', { item: this.selectedItem });
           }
