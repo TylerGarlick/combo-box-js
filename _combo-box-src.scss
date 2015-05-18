@@ -18,7 +18,7 @@ $comboBoxClearXColorHover: $comboBoxDarkText !default;
 
 // Dropdown Styles
 $comboBoxOptionsText: #333 !default;
-$comboBoxOptionsBackground: #eee !default;
+$comboBoxOptionsBackground: #fff !default;
 $comboBoxOptionsHoverText: #fff !default;
 $comboBoxOptionsHoverBackground: #333 !default;
 
@@ -40,6 +40,11 @@ $comboBoxSelectedOptionBackground: darken($comboBoxLightText, 5%) !default;
   font-weight: $comboBoxFontWeight;
 }
 
+:host([disabled]) {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
 #selectContainer {
   color: $comboBoxDarkText;
   border: $comboBoxBorderWidth solid $comboBoxBorderColor;
@@ -52,8 +57,9 @@ $comboBoxSelectedOptionBackground: darken($comboBoxLightText, 5%) !default;
     z-index: 9999;
   }
   input {
-    height: calc(100% - 10px);
-    width: calc(100% - 20px);
+    height: calc(100% - 0px);
+    width: calc(100% - 24px);
+    display: block;
   }
 }
 
@@ -89,13 +95,13 @@ $comboBoxSelectedOptionBackground: darken($comboBoxLightText, 5%) !default;
   font-weight: 300;
   color: black;
   font-family: 'Open Sans', Arial, sans-serif;
-  width: calc(100% - (($comboBoxPaddingX * 2)+($comboBoxBorderWidth * 2)));
+  width: calc(100% - ($comboBoxPaddingX2 + ($comboBoxBorderWidth * 2)));
   background: $comboBoxBackground;
   border-radius: 0;
   core-icon {
     float: right;
     margin-top: $comboBoxPaddingX/2;
-    //margin-right: -($comboBoxPaddingX/2);
+    margin-right: -($comboBoxPaddingX/2);
     margin-bottom: 0;
     margin-left: $comboBoxPaddingX/4;
     line-height: $comboBoxLineHeight;
@@ -144,7 +150,7 @@ core-selector {
 #filter-container {
   width: 100%;
   background: $comboBoxBackground;
-  border-width: $comboBoxBorderWidth 0;
+  border-width: 0 0 $comboBoxBorderWidth;
   border-style: solid;
   border-color: $comboBoxLightText;
   position: relative;
@@ -179,8 +185,11 @@ core-selector {
   line-height: $comboBoxFilterFontSize*2;
   height: $comboBoxFilterFontSize*2;
   padding: $comboBoxPaddingX/2 $comboBoxPaddingX;
+  border-width: $comboBoxBorderWidth 0 0;
+  border-style: solid;
+  border-color: $comboBoxLightText;
   //margin: $comboBoxPaddingX;
-  width: calc(100% - 50px);
+  width: calc(100% - $comboBoxPaddingX2);
   position: relative;
   top: 0;
   left: 0;
