@@ -262,22 +262,25 @@ Element providing solution to no problem in particular.
       _addOverlay: function () {
         var self = this;
         var overlay = document.querySelector('html /deep/ #comboBoxOverlay');
+        var selectContainer = self.$.selectContainer;
         if (!overlay) {
+          var parent = self.$.selectContainer.parentNode;
           overlay = document.createElement('div');
           overlay.id = 'comboBoxOverlay';
-          overlay.setAttribute('style', 'background: transparent; position: fixed; left: 0; top: 0; width: 100vw; height: 100vh; z-index: 3;');
+          overlay.setAttribute('style', 'background: transparent; position: fixed; left: 0; top: 0; width: 100vw; height: 100vh; z-index: 8888;');
           overlay.addEventListener('click', function () {
             self.resetFilterValue();
             self.close();
           });
-          document.body.appendChild(overlay);
+          parent.insertBefore(overlay, selectContainer);
         }
       },
 
       _removeOverlay: function () {
         var overlay = document.querySelector('html /deep/ #comboBoxOverlay');
+        var parent = document.querySelector('html /deep/ #comboBoxOverlay').parentNode;
         if (overlay) {
-          document.body.removeChild(document.querySelector('html /deep/ #comboBoxOverlay'));
+          parent.removeChild(overlay);
         }
       },
 

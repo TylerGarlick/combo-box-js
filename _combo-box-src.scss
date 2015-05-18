@@ -49,7 +49,7 @@ $comboBoxSelectedOptionBackground: darken($comboBoxLightText, 5%) !default;
   width: 100%;
   z-index: 2;
   &[active] {
-    z-index: 4;
+    z-index: 9999;
   }
   input {
     height: calc(100% - 10px);
