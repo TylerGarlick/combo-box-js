@@ -198,6 +198,12 @@ Element providing solution to no problem in particular.
         }
       },
 
+      placeholderChanged: function(oldValue, newValue) {
+        if (newValue) {
+          this.label = this.placeholder;
+        }
+      },
+
       _performFilter: function (e, detail) {
         var filter = this.$['filter-container'].querySelector('input');
         var filterValue = filter.value;
@@ -278,8 +284,8 @@ Element providing solution to no problem in particular.
 
       _removeOverlay: function () {
         var overlay = document.querySelector('html /deep/ #comboBoxOverlay');
-        var parent = document.querySelector('html /deep/ #comboBoxOverlay').parentNode;
         if (overlay) {
+          var parent = overlay.parentNode;
           parent.removeChild(overlay);
         }
       },
