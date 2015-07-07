@@ -35,7 +35,7 @@ Element providing solution to no problem in particular.
           <core-icon icon="close" on-tap="{{ clearSelectedValue }}"></core-icon>
         </template>
       </div>
-      <article id="filter-container" hidden?="{{ !showOptions }}">
+      <article id="filterContainer" hidden?="{{ !showOptions }}">
         <template if="{{ filterVisible }}">
           <input type="text" is="core-input" id="filter" placeholder="Filter" on-keyup="{{ _performFilter }}" on-focus="{{ _filterFocused }}" on-blur="{{ _filterBlurred }}" />
 
@@ -101,7 +101,7 @@ Element providing solution to no problem in particular.
         var self = this;
         if (this.filterVisible) {
           this.async(function () {
-            self.$['filter-container'].querySelector('input').focus();
+            self.$.filterContainer.querySelector('input').focus();
           }, null, 1);
         }
       },
@@ -114,8 +114,9 @@ Element providing solution to no problem in particular.
       clearSelectedValue: function () {
         var self = this;
         this.label = this.placeholder;
+        this.value = undefined;
         this.resetFilterValue();
-        this.selectedItem = null;
+        this.selectedItem = undefined;
         this.$.selector.selectedIndex = -1;
         this.async(function () {
           self.close();
@@ -124,7 +125,8 @@ Element providing solution to no problem in particular.
 
       resetFilterValue: function () {
         this.filteredOptions = this.options;
-        var filter = this.$['filter-container'].querySelector('input');
+        var filter = this.$.filterContainer.querySelector('input');
+        this.isFilterFocused = false;
         if (filter) {
           filter.value = '';
         }
@@ -205,7 +207,7 @@ Element providing solution to no problem in particular.
       },
 
       _performFilter: function (e, detail) {
-        var filter = this.$['filter-container'].querySelector('input');
+        var filter = this.$.filterContainer.querySelector('input');
         var filterValue = filter.value;
         this.filteredOptions = this.filterOptionsBy(this.options, filterValue);
         this.filterResetVisible = filterValue.length > 0;

@@ -10,11 +10,9 @@
   </head>
   <body unresolved>
     <p>A `combo-box` looks like this:</p>
-    <combo-box placeholder="Select something.." valueField="word" labelField="word" value="Known"></combo-box>
+    <combo-box id="comboBox" placeholder="Select something.." valueField="word" labelField="word"></combo-box>
     <br/>
-    <combo-box placeholder="Select something else.." valueField="word" labelField="word" searchThreshold="1000" noData="No luck, search again."></combo-box>
-    <br/>
-    <combo-box placeholder="Select it.." disabled></combo-box>
+    <button id="checkValue" type="button">Check Value</button>
     <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit,
        sed diam nonummy nibh euismod tincidunt ut laoreet dolore
        magna aliquam erat volutpat. Ut wisi enim ad minim veniam,
@@ -39,7 +37,8 @@
 
       document.addEventListener('polymer-ready', function () {
         var items = [];
-        var comboBox = document.querySelector('combo-box');
+        var comboBox = document.querySelector('#comboBox');
+        var button = document.querySelector('#checkValue');
 
         for(var i = 0; i < 100; i++) {
           var word = chance.word();
@@ -50,11 +49,9 @@
 
         comboBox.options = items;
 
-        comboBox.addEventListener('combo-box-selected', function (e) {
-          console.log(e.detail.item);
+        button.addEventListener('click', function (e) {
+          console.log(comboBox.value);
         });
-
-
 
       });
 
