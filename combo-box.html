@@ -114,9 +114,7 @@ Element providing solution to no problem in particular.
       clearSelectedValue: function () {
         var self = this;
         this.label = this.placeholder;
-        this.value = undefined;
-        this.resetFilterValue();
-        this.selectedItem = undefined;
+        this.value = null;
         this.$.selector.selectedIndex = -1;
         this.async(function () {
           self.close();
@@ -127,6 +125,7 @@ Element providing solution to no problem in particular.
         this.filteredOptions = this.options;
         var filter = this.$.filterContainer.querySelector('input');
         this.isFilterFocused = false;
+        this.filterResetVisible = false;
         if (filter) {
           filter.value = '';
         }
