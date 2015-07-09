@@ -61,6 +61,7 @@ Element providing solution to no problem in particular.
   </template>
 
   <script>
+
     Polymer({
 
       created: function () {
@@ -119,6 +120,7 @@ Element providing solution to no problem in particular.
         this.async(function () {
           self.close();
         });
+        this.fire('clear-selected-value');
       },
 
       resetFilterValue: function () {
