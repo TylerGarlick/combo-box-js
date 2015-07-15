@@ -98,21 +98,35 @@ $comboBoxSelectedOptionBackground: darken($comboBoxLightText, 5%) !default;
   width: calc(100% - ($comboBoxPaddingX2 + ($comboBoxBorderWidth * 2)));
   background: $comboBoxBackground;
   border-radius: 0;
+  position: relative;
+  cursor: pointer;
+  span {
+    display: block;
+    width: calc(100% - 20px);
+    float: left;
+    white-space: nowrap;
+    padding-right: 0;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    &.selected {
+      width: calc(100% - 50px);
+      padding-right: 30px;
+    }
+  }
   core-icon {
-    float: right;
-    margin-top: $comboBoxPaddingX/2;
-    margin-right: -($comboBoxPaddingX/2);
-    margin-bottom: 0;
-    margin-left: $comboBoxPaddingX/4;
+    position: absolute;
+    top: $comboBoxPaddingX/2;
+    right: $comboBoxPaddingX/3*2;
     line-height: $comboBoxLineHeight;
     color: $comboBoxArrowColor;
     height: $comboBoxIconSize;
     width: $comboBoxIconSize;
     &[icon="close"]{
+      right: 32px;
       color: $comboBoxClearXColor;
       transition: opacity 0.25s linear;
-      opacity: 0;
-      &:hover{
+      opacity: 0.5;
+      &:hover {
         color: $comboBoxClearXColorHover;
         transition: color 0.25s linear;
       }
@@ -140,6 +154,7 @@ core-selector {
     &:hover {
       background: $comboBoxOptionsHoverBackground;
       color: $comboBoxOptionsHoverText;
+      cursor: pointer;
     }
   }
   article {
@@ -235,4 +250,13 @@ core-selector {
 
 .core-selected {
   background: $comboBoxSelectedOptionBackground;
+}
+
+// IE10+
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+  #selectContainer {
+    input {
+      height: 26px;
+    }
+  }
 }

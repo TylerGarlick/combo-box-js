@@ -21,16 +21,16 @@ Element providing solution to no problem in particular.
 @status alpha
 @homepage http://TylerGarlick.github.io/combo-box
 -->
-<polymer-element name="combo-box" attributes="options placeholder resettable filterType searchThreshold filterVisible valueField labelField noData value" resettable="false" filterType="startsWith" valueField="value" labelField="label" noData="No results.">
+<polymer-element name="combo-box" attributes="options placeholder resettable filterType searchThreshold filterVisible valueField labelField noData value focusFilter" resettable="false" filterType="startsWith" valueField="value" labelField="label" noData="No results.">
 
   <template>
     <link rel="stylesheet" href="combo-box.css">
 
-    <div on-tap="{{ toggle }}" id="selectContainer" active?="{{ showOptions }}">
+    <div id="selectContainer" active?="{{ showOptions }}">
       <div is="core-input" id="selected-option">
-        {{ label }}
-        <core-icon icon="arrow-drop-down" hidden?="{{ showOptions }}"></core-icon>
-        <core-icon icon="arrow-drop-up" hidden?="{{ !showOptions }}"></core-icon>
+        <span class="toggle" id="selectedLabel">{{ label }}</span>
+        <core-icon icon="arrow-drop-down" hidden?="{{ showOptions }}" class="toggle"></core-icon>
+        <core-icon icon="arrow-drop-up" hidden?="{{ !showOptions }}" class="toggle"></core-icon>
         <template if="{{ clearSelectedVisible }}">
           <core-icon icon="close" on-tap="{{ clearSelectedValue }}"></core-icon>
         </template>
@@ -51,7 +51,7 @@ Element providing solution to no problem in particular.
       <div id="dataWrapper" hidden?="{{ !showOptions }}">
         <core-selector id="selector" excludedLocalNames="section article details" valueattr="value" labelattr="label" on-core-select="{{ _onSelectedItem }}" selected="{{ value }}">
           <template repeat="{{ option in filteredOptions }}">
-            <div label="{{ option[labelField] }}" value="{{ option[valueField] }}">{{ option[labelField] }}</div>
+            <div label="{{ option[labelField] }}" value="{{ option[valueField] }}" class="toggle">{{ option[labelField] }}</div>
           </template>
           <article id="noResults" hidden?="{{ filteredOptions.length !== 0 }}">{{ noData }}</article>
         </core-selector>
@@ -76,11 +76,19 @@ Element providing solution to no problem in particular.
         this.clearSelectedVisible = false;
         this.filterVisible = false;
         this.searchThreshold = 10;
+        this.focusFilter = false;
       },
 
       ready: function () {
+        var self = this;
         this.label = this.placeholder;
         this.valueCommitted = this.value;
+        this.$.selectContainer.addEventListener('click', function(e){
+          if(e.target !== e.currentTarget && e.target.classList.contains('toggle')){
+            return self.toggle();
+          }
+          event.stopPropagation();
+        }, false);
       },
 
       /**
@@ -89,22 +97,27 @@ Element providing solution to no problem in particular.
        * @method toggle
        */
       toggle: function () {
-        if (this.isFilterFocused) return;
-        this.showOptions = !this.showOptions;
+          var self = this;
 
-        // Create and destroy overlay
-        if (this.showOptions) {
-          this._addOverlay();
-        } else {
-          this._removeOverlay();
-        }
+          if (this.isFilterFocused) {
+            this.showOptions = true;
+          }else{
+            this.showOptions = !this.showOptions;
+          }
 
-        var self = this;
-        if (this.filterVisible) {
-          this.async(function () {
-            self.$.filterContainer.querySelector('input').focus();
-          }, null, 1);
-        }
+          // Create and destroy overlay
+          if (this.showOptions) {
+            this._addOverlay();
+          } else {
+            this._removeOverlay();
+          }
+
+          // Focuses on filter when drop-down open if focusFilter exists
+          if (this.filterVisible && this.focusFilter) {
+            this.async(function () {
+              self.$.filterContainer.querySelector('input').focus();
+            }, null, 1);
+          }
       },
 
       /**
@@ -121,21 +134,23 @@ Element providing solution to no problem in particular.
           self.close();
         });
         this.fire('clear-selected-value');
+        self.$.selectedLabel.classList.remove('selected');
       },
 
       resetFilterValue: function () {
         this.filteredOptions = this.options;
         var filter = this.$.filterContainer.querySelector('input');
-        this.isFilterFocused = false;
+        this.isFilterFocused = true;
         this.filterResetVisible = false;
         if (filter) {
           filter.value = '';
         }
+        this.$.filterContainer.querySelector('#filter').focus();
       },
 
       resetFilter: function () {
         this.resetFilterValue();
-        this.isFilterFocused = true;
+        this.isFilterFocused = false;
       },
 
       reset: function () {
@@ -245,10 +260,11 @@ Element providing solution to no problem in particular.
       },
 
       _onSelectedItem: function (e, detail, sender) {
+        var self = this;
         if (this.$.selector.selected) {
           this.clearSelectedVisible = true;
           var item = e.detail.item;
-          this.label = item.innerText;
+          this.label = item.textContent || item.innerText;
 
           var selection = this.findOptionByLabel(this.label);
           this.$.selector.selectedIndex = this.findOptionIndexByLabel(this.filteredOptions, this.label);
@@ -256,9 +272,11 @@ Element providing solution to no problem in particular.
             this.selectedItem = selection;
             this.asyncFire('combo-box-selected', { item: this.selectedItem });
           }
+          self.$.selectedLabel.classList.add('selected');
         } else {
           this.clearSelectedVisible = false;
           this.asyncFire('combo-box-unselected');
+          self.$.selectedLabel.classList.remove('selected');
         }
       },
 

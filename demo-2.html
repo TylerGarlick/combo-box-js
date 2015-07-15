@@ -12,7 +12,6 @@
     <p>A `combo-box` looks like this:</p>
     <combo-box id="comboBox" placeholder="Select something.." valueField="word" labelField="word"></combo-box>
     <br/>
-    <button id="checkValue" type="button">Check Value</button>
     <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit,
        sed diam nonummy nibh euismod tincidunt ut laoreet dolore
        magna aliquam erat volutpat. Ut wisi enim ad minim veniam,
@@ -48,10 +47,6 @@
         items.push({ word: 'Known' });
 
         comboBox.options = items;
-
-        button.addEventListener('click', function (e) {
-          console.log(comboBox.value);
-        });
 
       });
 
