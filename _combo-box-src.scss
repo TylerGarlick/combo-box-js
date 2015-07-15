@@ -43,6 +43,13 @@ $comboBoxSelectedOptionBackground: darken($comboBoxLightText, 5%) !default;
 :host([disabled]) {
   opacity: 0.5;
   pointer-events: none;
+  #selected-option {
+    core-icon {
+      &[icon="close"]{
+        display: none;
+      }
+    }
+  }
 }
 
 #selectContainer {
